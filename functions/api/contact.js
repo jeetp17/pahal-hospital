@@ -31,8 +31,8 @@ const isTooLong = (value, max) => value.length > max;
 
 const trimTrailingSlash = (value) => String(value || "").replace(/\/+$/, "");
 
-const getZohoAccountsUrl = (env) => trimTrailingSlash(env.ZOHO_ACCOUNTS_URL || "https://accounts.zoho.in");
-const getZohoMailApiBase = (env) => trimTrailingSlash(env.ZOHO_MAIL_API_BASE || "https://mail.zoho.in");
+const getZohoAccountsUrl = (env) => trimTrailingSlash(env.ZOHO_ACCOUNTS_URL || "https://accounts.zoho.com");
+const getZohoMailApiBase = (env) => trimTrailingSlash(env.ZOHO_MAIL_API_BASE || "https://mail.zoho.com");
 
 const getZohoTokenUrl = (env) => `${getZohoAccountsUrl(env)}/oauth/v2/token`;
 const getZohoSendUrl = (env) =>
@@ -200,7 +200,7 @@ async function handleContactPost({ request, env }) {
   }
 
   const to = env.CONTACT_TO || "info@pahalhospital.com";
-  const from = env.CONTACT_FROM || "info@pahalhospital.com";
+  const from = env.CONTACT_FROM || "noreply@pahalhospital.com";
   const html = `
     <p><strong>Name:</strong> ${escapeHtml(name)}</p>
     <p><strong>Email:</strong> ${escapeHtml(email)}</p>

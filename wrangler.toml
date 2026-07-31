@@ -4,8 +4,8 @@ pages_build_output_dir = "dist"
 
 [vars]
 CONTACT_TO = "info@pahalhospital.com"
-CONTACT_FROM = "info@pahalhospital.com"
+CONTACT_FROM = "noreply@pahalhospital.com"
 PUBLIC_TURNSTILE_SITE_KEY = "0x4AAAAAAEC1CwMFa0GeHvMx"
 ZOHO_ACCOUNTS_URL = "https://accounts.zoho.com"
 ZOHO_MAIL_API_BASE = "https://mail.zoho.com"
-ZOHO_ACCOUNT_ID = "1593302000000008002"
+ZOHO_ACCOUNT_ID = "7122537000000008002"

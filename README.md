@@ -23,12 +23,12 @@ Create a local `.env` file from `.env.example`:
 
 ```env
 CONTACT_TO=info@pahalhospital.com
-CONTACT_FROM=info@pahalhospital.com
+CONTACT_FROM=noreply@pahalhospital.com
 PUBLIC_TURNSTILE_SITE_KEY=your-turnstile-site-key
 TURNSTILE_SECRET_KEY=your-turnstile-secret-key
 ZOHO_ACCOUNTS_URL=https://accounts.zoho.com
 ZOHO_MAIL_API_BASE=https://mail.zoho.com
-ZOHO_ACCOUNT_ID=1593302000000008002your-zoho-mail-account-id
+ZOHO_ACCOUNT_ID=7122537000000008002
 ZOHO_CLIENT_ID=your-zoho-client-id
 ZOHO_CLIENT_SECRET=your-zoho-client-secret
 ZOHO_REFRESH_TOKEN=your-zoho-refresh-token
@@ -84,7 +84,7 @@ The form sends:
 
 ```text
 To: info@pahalhospital.com
-From: info@pahalhospital.com
+From: noreply@pahalhospital.com
 Visitor email: included inside the message body
 ```
 
@@ -94,12 +94,11 @@ The Pages Function refreshes the Zoho OAuth access token with `ZOHO_REFRESH_TOKE
 POST https://mail.zoho.com/api/accounts/{zoho_account_id}/messages
 ```
 
-Use the matching Zoho region if the mailbox is not on India data center:
+Use the Zoho API domain returned by the account API response. This project currently uses `mail.zoho.com`:
 
 ```text
-India: ZOHO_ACCOUNTS_URL=https://accounts.zoho.com, ZOHO_MAIL_API_BASE=https://mail.zoho.com
-US:    ZOHO_ACCOUNTS_URL=https://accounts.zoho.com, ZOHO_MAIL_API_BASE=https://mail.zoho.com
-EU:    ZOHO_ACCOUNTS_URL=https://accounts.zoho.eu, ZOHO_MAIL_API_BASE=https://mail.zoho.eu
+Current: ZOHO_ACCOUNTS_URL=https://accounts.zoho.com, ZOHO_MAIL_API_BASE=https://mail.zoho.com
+EU example: ZOHO_ACCOUNTS_URL=https://accounts.zoho.eu, ZOHO_MAIL_API_BASE=https://mail.zoho.eu
 ```
 
 ## Cloudflare Pages Deployment
@@ -125,17 +124,17 @@ pages_build_output_dir = "dist"
 
 [vars]
 CONTACT_TO = "info@pahalhospital.com"
-CONTACT_FROM = "info@pahalhospital.com"
+CONTACT_FROM = "noreply@pahalhospital.com"
 PUBLIC_TURNSTILE_SITE_KEY = "your-turnstile-site-key"
 ZOHO_ACCOUNTS_URL = "https://accounts.zoho.com"
 ZOHO_MAIL_API_BASE = "https://mail.zoho.com"
+ZOHO_ACCOUNT_ID = "7122537000000008002"
 ```
 
 Set these in Cloudflare Pages as secret/encrypted variables:
 
 ```text
 TURNSTILE_SECRET_KEY
-ZOHO_ACCOUNT_ID
 ZOHO_CLIENT_ID
 ZOHO_CLIENT_SECRET
 ZOHO_REFRESH_TOKEN
@@ -154,8 +153,11 @@ ZohoMail.messages.CREATE,ZohoMail.accounts.READ
 ```
 
 4. Exchange the code for a refresh token.
-5. Use the access token to call `/api/accounts` and copy the account ID for `info@pahalhospital.com`.
-6. Put `ZOHO_ACCOUNT_ID`, `ZOHO_CLIENT_ID`, `ZOHO_CLIENT_SECRET`, and `ZOHO_REFRESH_TOKEN` into Cloudflare Pages secrets.
+5. Use the access token to call `/api/accounts` and copy the account ID for `noreply@pahalhospital.com`.
+6. Put the account ID in `wrangler.toml` as `ZOHO_ACCOUNT_ID`.
+7. Put `ZOHO_CLIENT_ID`, `ZOHO_CLIENT_SECRET`, and `ZOHO_REFRESH_TOKEN` into Cloudflare Pages secrets.
+
+The `ZOHO_REFRESH_TOKEN` must be generated for the `noreply@pahalhospital.com` Zoho account, because `ZOHO_ACCOUNT_ID` points to that mailbox. The form still delivers messages to `info@pahalhospital.com`.
 
 Do not commit Zoho secrets.
 
