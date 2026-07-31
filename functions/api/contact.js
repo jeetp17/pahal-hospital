@@ -1,5 +1,4 @@
 const TURNSTILE_VERIFY_URL = "https://challenges.cloudflare.com/turnstile/v0/siteverify";
-const CLOUDFLARE_EMAIL_API_BASE = "https://api.cloudflare.com/client/v4/accounts";
 
 const json = (payload, status = 200) =>
   new Response(JSON.stringify(payload), {
@@ -30,8 +29,14 @@ const maxLengths = {
 
 const isTooLong = (value, max) => value.length > max;
 
-const getEmailApiUrl = (accountId) =>
-  `${CLOUDFLARE_EMAIL_API_BASE}/${encodeURIComponent(accountId)}/email/sending/send`;
+const trimTrailingSlash = (value) => String(value || "").replace(/\/+$/, "");
+
+const getZohoAccountsUrl = (env) => trimTrailingSlash(env.ZOHO_ACCOUNTS_URL || "https://accounts.zoho.in");
+const getZohoMailApiBase = (env) => trimTrailingSlash(env.ZOHO_MAIL_API_BASE || "https://mail.zoho.in");
+
+const getZohoTokenUrl = (env) => `${getZohoAccountsUrl(env)}/oauth/v2/token`;
+const getZohoSendUrl = (env) =>
+  `${getZohoMailApiBase(env)}/api/accounts/${encodeURIComponent(env.ZOHO_ACCOUNT_ID)}/messages`;
 
 const verifyTurnstile = async ({ token, request, env }) => {
   if (!env.TURNSTILE_SECRET_KEY) {
@@ -84,6 +89,75 @@ const verifyTurnstile = async ({ token, request, env }) => {
   return { ok: true };
 };
 
+const missingZohoConfig = (env) =>
+  !env.ZOHO_ACCOUNT_ID ||
+  !env.ZOHO_CLIENT_ID ||
+  !env.ZOHO_CLIENT_SECRET ||
+  !env.ZOHO_REFRESH_TOKEN;
+
+const getZohoAccessToken = async (env) => {
+  const body = new URLSearchParams({
+    grant_type: "refresh_token",
+    client_id: env.ZOHO_CLIENT_ID,
+    client_secret: env.ZOHO_CLIENT_SECRET,
+    refresh_token: env.ZOHO_REFRESH_TOKEN
+  });
+
+  const response = await fetch(getZohoTokenUrl(env), {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/x-www-form-urlencoded"
+    },
+    body
+  });
+
+  const result = await response.json().catch(() => null);
+  if (!response.ok || !result?.access_token) {
+    console.error("Zoho OAuth token refresh failed", {
+      status: response.status,
+      error: result?.error,
+      errorDescription: result?.error_description
+    });
+    throw new Error("Zoho token refresh failed");
+  }
+
+  return result.access_token;
+};
+
+const sendZohoEmail = async ({ env, from, to, subject, html }) => {
+  const accessToken = await getZohoAccessToken(env);
+  const response = await fetch(getZohoSendUrl(env), {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      Authorization: `Zoho-oauthtoken ${accessToken}`,
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      fromAddress: from,
+      toAddress: to,
+      subject,
+      content: html,
+      mailFormat: "html"
+    })
+  });
+
+  const result = await response.json().catch(() => null);
+  const zohoStatusCode = Number(result?.status?.code || 0);
+  const isZohoSuccess = response.ok && (!zohoStatusCode || zohoStatusCode < 400);
+
+  if (!isZohoSuccess) {
+    console.error("Zoho Mail API failed", {
+      status: response.status,
+      code: result?.status?.code,
+      description: result?.status?.description,
+      moreInfo: result?.data?.moreInfo
+    });
+    throw new Error("Zoho Mail API failed");
+  }
+};
+
 async function handleContactPost({ request, env }) {
   let form;
 
@@ -121,13 +195,12 @@ async function handleContactPost({ request, env }) {
     return json({ key: false, value: captcha.message }, captcha.status);
   }
 
-  if (!env.CLOUDFLARE_ACCOUNT_ID || !env.CLOUDFLARE_EMAIL_API_TOKEN) {
+  if (missingZohoConfig(env)) {
     return json({ key: false, value: "Email service is not configured yet." }, 500);
   }
 
   const to = env.CONTACT_TO || "info@pahalhospital.com";
-  const from = env.CONTACT_FROM || "noreply@pahalhospital.com";
-  const text = `Name: ${name}\nEmail: ${email}\nSubject: ${subject}\n\n${message}`;
+  const from = env.CONTACT_FROM || "info@pahalhospital.com";
   const html = `
     <p><strong>Name:</strong> ${escapeHtml(name)}</p>
     <p><strong>Email:</strong> ${escapeHtml(email)}</p>
@@ -137,32 +210,13 @@ async function handleContactPost({ request, env }) {
   `;
 
   try {
-    const response = await fetch(getEmailApiUrl(env.CLOUDFLARE_ACCOUNT_ID), {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        Authorization: `Bearer ${env.CLOUDFLARE_EMAIL_API_TOKEN}`,
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        to,
-        from,
-        reply_to: email,
-        subject: `Website enquiry: ${subject}`,
-        text,
-        html
-      })
+    await sendZohoEmail({
+      env,
+      from,
+      to,
+      subject: `Website enquiry: ${subject}`,
+      html
     });
-
-    const result = await response.json().catch(() => null);
-    if (!response.ok || !result?.success) {
-      console.error("Cloudflare Email API failed", {
-        status: response.status,
-        errors: result?.errors,
-        messages: result?.messages
-      });
-      return json({ key: false, value: "Problem while sending email, please call the hospital directly." }, 502);
-    }
   } catch {
     return json({ key: false, value: "Problem while sending email, please call the hospital directly." }, 502);
   }
