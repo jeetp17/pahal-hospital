@@ -1,3 +1,9 @@
 name = "pahal-hospital"
 compatibility_date = "2026-07-31"
 pages_build_output_dir = "dist"
+
+[vars]
+CONTACT_TO = "info@pahalhospital.com"
+CONTACT_FROM = "noreply@pahalhospital.com"
+PUBLIC_TURNSTILE_SITE_KEY = "0x4AAAAAAEC1CwMFa0GeHvMx"
+CLOUDFLARE_ACCOUNT_ID = "bd16ea9f44f984a578515f37d14e6bb9"
