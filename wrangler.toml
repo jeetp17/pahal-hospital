@@ -1,7 +1,3 @@
 name = "pahal-hospital"
 compatibility_date = "2026-07-31"
 pages_build_output_dir = "dist"
-
-[[send_email]]
-name = "EMAIL"
-destination_address = "info@pahalhospital.com"

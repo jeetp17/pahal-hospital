@@ -1,4 +1,5 @@
 const TURNSTILE_VERIFY_URL = "https://challenges.cloudflare.com/turnstile/v0/siteverify";
+const CLOUDFLARE_EMAIL_API_BASE = "https://api.cloudflare.com/client/v4/accounts";
 
 const json = (payload, status = 200) =>
   new Response(JSON.stringify(payload), {
@@ -28,6 +29,9 @@ const maxLengths = {
 };
 
 const isTooLong = (value, max) => value.length > max;
+
+const getEmailApiUrl = (accountId) =>
+  `${CLOUDFLARE_EMAIL_API_BASE}/${encodeURIComponent(accountId)}/email/sending/send`;
 
 const verifyTurnstile = async ({ token, request, env }) => {
   if (!env.TURNSTILE_SECRET_KEY) {
@@ -117,7 +121,7 @@ export async function onRequestPost({ request, env }) {
     return json({ key: false, value: captcha.message }, captcha.status);
   }
 
-  if (!env.EMAIL || typeof env.EMAIL.send !== "function") {
+  if (!env.CLOUDFLARE_ACCOUNT_ID || !env.CLOUDFLARE_EMAIL_API_TOKEN) {
     return json({ key: false, value: "Email service is not configured yet." }, 500);
   }
 
@@ -133,14 +137,27 @@ export async function onRequestPost({ request, env }) {
   `;
 
   try {
-    await env.EMAIL.send({
-      to,
-      from,
-      replyTo: email,
-      subject: `Website enquiry: ${subject}`,
-      text,
-      html
+    const response = await fetch(getEmailApiUrl(env.CLOUDFLARE_ACCOUNT_ID), {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        Authorization: `Bearer ${env.CLOUDFLARE_EMAIL_API_TOKEN}`,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        to,
+        from,
+        reply_to: email,
+        subject: `Website enquiry: ${subject}`,
+        text,
+        html
+      })
     });
+
+    const result = await response.json().catch(() => null);
+    if (!response.ok || !result?.success) {
+      return json({ key: false, value: "Problem while sending email, please call the hospital directly." }, 502);
+    }
   } catch {
     return json({ key: false, value: "Problem while sending email, please call the hospital directly." }, 502);
   }

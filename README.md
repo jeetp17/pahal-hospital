@@ -9,6 +9,7 @@ Astro website for Pahal Hospital, built for Cloudflare Pages.
 - Cloudflare Pages for hosting
 - Cloudflare Turnstile for contact form captcha
 - Cloudflare Pages Function for `/api/contact`
+- Cloudflare Email Service REST API for contact form email sending
 
 ## Local Setup
 
@@ -25,6 +26,8 @@ CONTACT_TO=info@pahalhospital.com
 CONTACT_FROM=noreply@pahalhospital.com
 PUBLIC_TURNSTILE_SITE_KEY=your-turnstile-site-key
 TURNSTILE_SECRET_KEY=your-turnstile-secret-key
+CLOUDFLARE_ACCOUNT_ID=your-cloudflare-account-id
+CLOUDFLARE_EMAIL_API_TOKEN=your-cloudflare-email-api-token
 ```
 
 Run the site locally:
@@ -69,18 +72,16 @@ The form includes:
 
 ## Email Sending
 
-The project uses a Cloudflare Email binding named `EMAIL`.
+The project sends email through the Cloudflare Email Service REST API.
+
+No SMTP port, username, password, or Workers `send_email` binding is required.
 
 Current `wrangler.toml`:
 
 ```toml
-name = "pahal-hospital-astro"
+name = "pahal-hospital"
 compatibility_date = "2026-07-31"
 pages_build_output_dir = "dist"
-
-[[send_email]]
-name = "EMAIL"
-destination_address = "info@pahalhospital.com"
 ```
 
 The form sends:
@@ -91,7 +92,11 @@ From: noreply@pahalhospital.com
 Reply-To: visitor email address
 ```
 
-No SMTP port, username, or password is required for this setup.
+The REST API endpoint used by the Pages Function is:
+
+```text
+POST https://api.cloudflare.com/client/v4/accounts/{account_id}/email/sending/send
+```
 
 ## Cloudflare Pages Deployment
 
@@ -103,6 +108,7 @@ Cloudflare Pages settings:
 Framework preset: Astro
 Build command: npm run build
 Build output directory: dist
+Root directory: /
 Node version: 22
 ```
 
@@ -113,26 +119,27 @@ CONTACT_TO=info@pahalhospital.com
 CONTACT_FROM=noreply@pahalhospital.com
 PUBLIC_TURNSTILE_SITE_KEY=your-turnstile-site-key
 TURNSTILE_SECRET_KEY=your-turnstile-secret-key
+CLOUDFLARE_ACCOUNT_ID=your-cloudflare-account-id
+CLOUDFLARE_EMAIL_API_TOKEN=your-cloudflare-email-api-token
 ```
 
-Set `TURNSTILE_SECRET_KEY` as a secret/encrypted variable.
+Set these as secret/encrypted variables:
+
+```text
+TURNSTILE_SECRET_KEY
+CLOUDFLARE_EMAIL_API_TOKEN
+```
 
 After adding variables, redeploy the site.
 
 ## Cloudflare Email Setup
 
-For the free fixed-recipient setup:
-
 1. Go to Cloudflare Dashboard.
-2. Open `Compute` -> `Email Service` -> `Email Routing`.
-3. Add and verify the destination address:
-
-```text
-info@pahalhospital.com
-```
-
-4. Keep the `send_email` binding in `wrangler.toml`.
-5. Redeploy Cloudflare Pages.
+2. Open `Compute` -> `Email Service`.
+3. Configure Email Sending for `pahalhospital.com` or verify the allowed destination/sender required by your Cloudflare Email plan.
+4. Create an API token with permission to send emails.
+5. Add the token to Cloudflare Pages as `CLOUDFLARE_EMAIL_API_TOKEN`.
+6. Add the account ID to Cloudflare Pages as `CLOUDFLARE_ACCOUNT_ID`.
 
 ## Testing Contact Form After Deployment
 
@@ -162,8 +169,8 @@ Common errors:
 
 - `Captcha service is not configured yet.` means `TURNSTILE_SECRET_KEY` is missing.
 - `Captcha verification failed.` means the Turnstile keys do not match or the domain is not allowed.
-- `Email service is not configured yet.` means the Cloudflare Email binding is not active.
-- `Problem while sending email` means the destination/from email setup needs checking in Cloudflare.
+- `Email service is not configured yet.` means `CLOUDFLARE_ACCOUNT_ID` or `CLOUDFLARE_EMAIL_API_TOKEN` is missing.
+- `Problem while sending email` means the Cloudflare Email API token, sender, recipient, or Email Service setup needs checking.
 
 ## Main Routes
 
