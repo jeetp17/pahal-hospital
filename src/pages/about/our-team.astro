@@ -1,0 +1,109 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import Icon from "../../components/Icon.astro";
+import SubPageBanner from "../../components/SubPageBanner.astro";
+import { siteMeta } from "../../data/site";
+
+const title = "Dr. Purvi Patel | Pahal Hospital Our Team";
+const description = "Meet Dr. Purvi Patel, Director at Pahal Hospital Surat, providing patient-focused obstetrics, gynecology, fertility, maternity and women's health care.";
+
+const doctor = {
+  name: "Dr. Purvi Patel",
+  image: "/images/doctor/purvi.webp",
+  role: "Director",
+  specialty: "Consultant Obstetrician, Gynecologist and Fertility Specialist",
+  facts: [
+    "Obstetrician & Gynecologist\nFertility (IVF) & Endoscopy Care",
+    "M.D. (DGO), F.A.M.S.",
+    "Director, Pahal Hospital",
+    "Mon - Fri: 11:00 AM to 2:00 PM\n6:00 PM to 8:00 PM\nSat: 11:00 AM to 2:00 PM"
+  ],
+  socialLinks: [
+    { href: siteMeta.sameAs[0], label: "Facebook", icon: "facebook", external: true },
+    { href: siteMeta.sameAs[1], label: "Instagram", icon: "instagram", external: true },
+    { href: "https://x.com/pahalhospital", label: "X", icon: "x", external: true },
+    { href: `mailto:${siteMeta.email}`, label: "Email", icon: "mail", external: false }
+  ]
+} as const;
+---
+
+<BaseLayout title={title} description={description} canonicalPath="/about/our-team" active="ABOUT">
+  <div class="team-page">
+    <SubPageBanner title="Our Team" />
+
+  <div id="sub-page-content">
+    <section class="doctor-detail">
+      <div class="container">
+        <div class="text-center doctor-detail__desktop-heading">
+          <h2 class="light bordered main-title">meet the <span>perfect specialists</span> team</h2>
+        </div>
+        <div class="height50 doctor-detail__heading-spacer"></div>
+
+        <article class="doctor-detail__profile">
+          <aside class="doctor-detail__sidebar" aria-label={`${doctor.name} summary`}>
+            <figure class="doctor-detail__photo">
+              <img src={doctor.image} alt={doctor.name} />
+            </figure>
+            <ul class="doctor-detail__facts">
+              {doctor.facts.map((fact) => (
+                <li>{fact.split("\n").map((line) => <><span>{line}</span><br /></>)}</li>
+              ))}
+            </ul>
+          </aside>
+
+          <div class="doctor-detail__content">
+            <header class="doctor-detail__header">
+              <div>
+                <h3>{doctor.name}</h3>
+                <p class="doctor-detail__role">
+                  {doctor.role}<br />
+                  {doctor.specialty}
+                </p>
+              </div>
+              <nav class="doctor-detail__social" aria-label={`${doctor.name} profile links`}>
+                {doctor.socialLinks.map((link) => (
+                  <a
+                    href={link.href}
+                    target={link.external ? "_blank" : undefined}
+                    rel={link.external ? "noreferrer" : undefined}
+                    aria-label={link.label}>
+                    <Icon name={link.icon} size={16} />
+                  </a>
+                ))}
+              </nav>
+            </header>
+
+            <p>
+              Dr. Purvi Patel provides patient-focused fertility, maternity and gynecology care with ethical guidance,
+              practical treatment plans and personal attention for every patient.
+            </p>
+
+            <p>
+              As Director of <strong>Pahal Hospital</strong>, Dr. Purvi Patel works with the clinical and administrative
+              team to provide coordinated care in a welcoming hospital environment. Her practice focuses on clear
+              communication, careful evaluation and treatment planning that respects each patient's health needs.
+            </p>
+
+            <p>
+              Her areas of care include obstetrics, gynecology, infertility care, maternity services and women's health
+              support. The goal is to make patients and families feel informed, comfortable and supported throughout
+              their treatment journey.
+            </p>
+
+            <p>
+              Pahal Hospital's medical, nursing and administrative teams work collaboratively with Dr. Purvi Patel to
+              deliver compassionate care, practical guidance and reliable support for patients in Surat and nearby areas.
+            </p>
+
+            <p>
+              <strong>Experience :</strong> 15+ Years<br />
+              <strong>Qualification :</strong> M.D. (DGO), F.A.M.S.<br />
+              <strong>Specialty :</strong> Obstetrics, gynecology, infertility care and maternity services.
+            </p>
+          </div>
+        </article>
+      </div>
+    </section>
+  </div>
+  </div>
+</BaseLayout>

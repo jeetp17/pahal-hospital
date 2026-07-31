@@ -1,0 +1,37 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import SubPageBanner from "./SubPageBanner.astro";
+import Icon from "./Icon.astro";
+
+interface Props {
+  title?: string;
+  description?: string;
+  bannerTitle?: string;
+  message?: string;
+}
+
+const {
+  title = "Service Page Under Construction | Pahal Hospital",
+  description = "This service page is being prepared by Pahal Hospital.",
+  bannerTitle = "Under Construction",
+  message = "This page is under construction."
+} = Astro.props;
+---
+
+<BaseLayout title={title} description={description} active="SERVICES" noindex={true}>
+  <SubPageBanner title={bannerTitle} />
+  <div id="sub-page-content" class="clearfix">
+    <div class="container">
+      <div class="error-text">
+        <p>
+          <span class="error-text__title">
+            <Icon name="alert-circle" class="error-text__icon" size={36} />
+            {message}
+          </span>
+          Please come back soon!
+        </p>
+        <a href="/" class="btn btn-default btn-rounded">go back to home</a>
+      </div>
+    </div>
+  </div>
+</BaseLayout>

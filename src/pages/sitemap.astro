@@ -1,0 +1,33 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import SubPageBanner from "../components/SubPageBanner.astro";
+
+const title = "Sitemap | Pahal Hospital";
+const description = "Find important Pahal Hospital website links including home, about, services, testimonials, contact and policy pages.";
+const siteLinks = [
+  { href: "/", label: "Home" },
+  { href: "/about", label: "About Us" },
+  { href: "/about/our-hospital", label: "Our Hospital" },
+  { href: "/about/our-team", label: "Our Team" },
+  { href: "/services", label: "Services" },
+  { href: "/testimonials", label: "Testimonials" },
+  { href: "/contact", label: "Contact Us" },
+  { href: "/privacy-policy", label: "Privacy Policy" },
+  { href: "/terms-and-conditions", label: "Terms & Conditions" },
+  { href: "/medical-disclaimer", label: "Medical Disclaimer" }
+];
+---
+
+<BaseLayout title={title} description={description} canonicalPath="/sitemap">
+  <SubPageBanner title="Sitemap" />
+  <div id="sub-page-content">
+    <div class="container big-font">
+      <h2 class="light bordered">site <span>links</span></h2>
+      <ul class="site-page-list">
+        {siteLinks.map((link) => (
+          <li><a href={link.href}>{link.label}</a></li>
+        ))}
+      </ul>
+    </div>
+  </div>
+</BaseLayout>

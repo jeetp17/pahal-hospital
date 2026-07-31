@@ -1,0 +1,98 @@
+---
+import Icon from "./Icon.astro";
+
+interface Props {
+  year: number;
+}
+
+const { year } = Astro.props;
+
+const quickLinks = [
+  { href: "/", label: "Home" },
+  { href: "/about", label: "About Us" },
+  { href: "/services", label: "Services" },
+  { href: "/testimonials", label: "Testimonials" },
+  { href: "/contact", label: "Contact Us" }
+];
+
+const policyLinks = [
+  { href: "/privacy-policy", label: "Privacy Policy" },
+  { href: "/terms-and-conditions", label: "Terms & Conditions" },
+  { href: "/medical-disclaimer", label: "Medical Disclaimer" },
+  { href: "/sitemap", label: "Sitemap" }
+];
+---
+
+<div class="colorful-row" aria-hidden="true"></div>
+<footer id="footer" class="site-footer">
+  <div class="container site-footer__inner">
+    <section class="site-footer__brand" aria-label="About Pahal Hospital">
+      <a class="site-footer__logo" href="/" aria-label="Pahal Hospital home">
+        <img src="/images/footer-logo.webp" alt="Pahal Hospital" />
+      </a>
+      <p>
+        A one-stop multi specialty hospital that will take care of all your health and medical needs.
+        Pahal Hospital sets high standards for quality and care to ensure a dependable healthcare experience.
+      </p>
+      <nav class="social-links" aria-label="Social links">
+        <a target="_blank" rel="noreferrer" href="https://www.facebook.com/pahalhospital/" aria-label="Facebook">
+          <Icon name="facebook" size={24} />
+        </a>
+        <a target="_blank" rel="noreferrer" href="https://www.instagram.com/Pahalhospital/" aria-label="Instagram">
+          <Icon name="instagram" size={24} />
+        </a>
+        <a target="_blank" rel="noreferrer" href="https://g.page/pahalhospital?share" aria-label="Google business profile">
+          <Icon name="google" size={24} />
+        </a>
+        <a target="_blank" rel="noreferrer" href="https://www.youtube.com/@pahalhospital" aria-label="YouTube">
+          <Icon name="youtube" size={24} />
+        </a>
+      </nav>
+    </section>
+
+    <address class="site-footer__contact" aria-label="Contact information">
+      <h3 class="site-footer__title">Contact Info</h3>
+      <ul class="site-footer__contact-list">
+        <li>
+          <Icon name="phone" class="site-footer__contact-icon" size={34} />
+          <span>
+            <a href="tel:+919879771477">(+91) 9879771477</a><br />
+            <a href="tel:+912612771477">(+91) 261 2771477</a>
+          </span>
+        </li>
+        <li>
+          <Icon name="mail" class="site-footer__contact-icon" size={34} />
+          <span><a href="mailto:info@pahalhospital.com">info@pahalhospital.com</a></span>
+        </li>
+        <li>
+          <Icon name="map-pin" class="site-footer__contact-icon" size={34} />
+          <span>Pahal Hospital<br />Morabhagal Circle, Rander Bambakhana Road,<br />Morabhagal, Surat - 395005</span>
+        </li>
+      </ul>
+    </address>
+
+    <div class="site-footer__links">
+      <nav class="site-footer__nav" aria-label="Quick links">
+        <h3 class="site-footer__title">Quick Links</h3>
+        <ul class="site-footer__link-list">
+          {quickLinks.map((link) => (
+            <li><a href={link.href}>{link.label}</a></li>
+          ))}
+        </ul>
+      </nav>
+
+      <nav class="site-footer__nav" aria-label="Policies">
+        <h3 class="site-footer__title">Policies</h3>
+        <ul class="site-footer__link-list">
+          {policyLinks.map((link) => (
+            <li><a href={link.href}>{link.label}</a></li>
+          ))}
+        </ul>
+      </nav>
+    </div>
+  </div>
+  <p class="copyright">
+    Copyright &copy; {year} Pahal Hospital. All right reserved. | Powered by
+    <a href="http://pahalinfotech.com/" title="Powered by Pahal Infotech" target="_blank" rel="noreferrer"> Pahal Infotech</a>
+  </p>
+</footer>

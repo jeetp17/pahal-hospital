@@ -1,0 +1,114 @@
+---
+const inlineIcons = {
+  "alert-circle": `
+    <circle cx="12" cy="12" r="10"></circle>
+    <line x1="12" y1="8" x2="12" y2="12"></line>
+    <line x1="12" y1="16" x2="12.01" y2="16"></line>
+  `,
+  "chevron-up": `
+    <polyline points="18 15 12 9 6 15"></polyline>
+  `,
+  clock: `
+    <circle cx="12" cy="12" r="10"></circle>
+    <polyline points="12 6 12 12 16 14"></polyline>
+  `,
+  eye: `
+    <path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6-10-6-10-6z"></path>
+    <circle cx="12" cy="12" r="3"></circle>
+  `,
+  facebook: `
+    <circle cx="12" cy="12" r="11" fill="#1877f2" stroke="none"></circle>
+    <path fill="#ffffff" stroke="none" d="M14.9 15.2l.5-3.2h-3.1V9.9c0-.9.4-1.7 1.8-1.7h1.4V5.5s-1.3-.2-2.5-.2c-2.6 0-4.3 1.6-4.3 4.4V12H5.8v3.2h2.9V23h3.6v-7.8h2.6z"></path>
+  `,
+  google: `
+    <path fill="#4285f4" stroke="none" d="M22.6 12.2c0-.8-.1-1.5-.2-2.2H12v4.3h5.9c-.3 1.4-1 2.5-2.2 3.3v2.8h3.6c2.1-2 3.3-4.8 3.3-8.2z"></path>
+    <path fill="#34a853" stroke="none" d="M12 23c3 0 5.5-1 7.3-2.6l-3.6-2.8c-1 .7-2.2 1.1-3.7 1.1-2.9 0-5.3-1.9-6.2-4.5H2.2v2.8C4 20.5 7.7 23 12 23z"></path>
+    <path fill="#fbbc05" stroke="none" d="M5.8 14.1A6.6 6.6 0 0 1 5.5 12c0-.7.1-1.4.3-2.1V7.1H2.2A11 11 0 0 0 1 12c0 1.8.4 3.5 1.2 4.9l3.6-2.8z"></path>
+    <path fill="#ea4335" stroke="none" d="M12 5.4c1.6 0 3.1.6 4.2 1.6l3.2-3.1C17.5 2.1 15 1 12 1 7.7 1 4 3.5 2.2 7.1l3.6 2.8c.9-2.6 3.3-4.5 6.2-4.5z"></path>
+  `,
+  instagram: `
+    <defs>
+      <linearGradient id="instagram-gradient" x1="4" y1="22" x2="22" y2="4" gradientUnits="userSpaceOnUse">
+        <stop offset="0" stop-color="#feda75"></stop>
+        <stop offset="0.28" stop-color="#fa7e1e"></stop>
+        <stop offset="0.55" stop-color="#d62976"></stop>
+        <stop offset="0.78" stop-color="#962fbf"></stop>
+        <stop offset="1" stop-color="#4f5bd5"></stop>
+      </linearGradient>
+    </defs>
+    <rect x="2" y="2" width="20" height="20" rx="5.5" fill="url(#instagram-gradient)" stroke="none"></rect>
+    <circle cx="12" cy="12" r="4" fill="none" stroke="#ffffff" stroke-width="1.8"></circle>
+    <circle cx="17.2" cy="6.8" r="1.25" fill="#ffffff" stroke="none"></circle>
+    <rect x="6.2" y="6.2" width="11.6" height="11.6" rx="3.6" fill="none" stroke="#ffffff" stroke-width="1.4"></rect>
+  `,
+  x: `
+    <path fill="currentColor" stroke="none" d="M13.9 10.5 21.2 2h-1.8l-6.3 7.3L8.1 2H2.3l7.7 11.2L2.3 22h1.8l6.7-7.8 5.4 7.8H22l-8.1-11.5Zm-2.4 2.8-.8-1.1-6.2-8.8h2.7l5 7.1.8 1.1 6.5 9.1h-2.7l-5.3-7.4Z"></path>
+  `,  mail: `
+    <rect x="3" y="5" width="18" height="14" rx="2"></rect>
+    <path d="m3 7 9 6 9-6"></path>
+  `,
+  "map-pin": `
+    <path d="M20 10c0 5.2-8 12-8 12S4 15.2 4 10a8 8 0 1 1 16 0z"></path>
+    <circle cx="12" cy="10" r="3"></circle>
+  `,
+  phone: `
+    <path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.7 19.7 0 0 1-8.6-3.1 19.3 19.3 0 0 1-6-6 19.7 19.7 0 0 1-3.1-8.6A2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8 9.9a16 16 0 0 0 6.1 6.1l1.3-1.3a2 2 0 0 1 2.1-.5c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2z"></path>
+  `,
+  youtube: `
+    <rect x="2" y="5" width="20" height="14" rx="4" fill="#ff0000" stroke="none"></rect>
+    <path fill="#ffffff" stroke="none" d="M10 8.8v6.4l5.6-3.2L10 8.8z"></path>
+  `
+} as const;
+
+const spriteIcons = {
+  sonography: "icon-01",
+  infertility: "icon-02",
+  gynecology: "icon-03",
+  laparoscopy: "icon-04",
+  obstetrics: "icon-05",
+  "fetal-medicine": "icon-06"
+} as const;
+
+type InlineIconName = keyof typeof inlineIcons;
+type SpriteIconName = keyof typeof spriteIcons;
+type IconName = InlineIconName | SpriteIconName;
+
+interface Props {
+  name: IconName;
+  class?: string;
+  size?: number;
+  title?: string;
+  strokeWidth?: number;
+}
+
+const {
+  name,
+  class: className = "",
+  size = 24,
+  title,
+  strokeWidth = 2
+} = Astro.props;
+
+const svg = name in inlineIcons ? inlineIcons[name as InlineIconName] : "";
+const spriteId = name in spriteIcons ? spriteIcons[name as SpriteIconName] : undefined;
+---
+
+<svg
+  class:list={["icon", `icon-${name}`, className]}
+  width={size}
+  height={size}
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width={strokeWidth}
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  aria-hidden={title ? undefined : "true"}
+  role={title ? "img" : undefined}>
+  {title && <title>{title}</title>}
+  {spriteId ? (
+    <use href={`/images/medical-icons.svg#${spriteId}`} x="0" y="0" width="24" height="24" />
+  ) : (
+    <Fragment set:html={svg} />
+  )}
+</svg>

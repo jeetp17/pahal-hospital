@@ -1,0 +1,50 @@
+[
+  {
+    "variant": "split",
+    "image": "/images/home/01.webp",
+    "alt": "Pahal Hospital fertility and maternity care",
+    "title": "Ethical Infertility",
+    "titleStrong": "Treatment in India",
+    "text": "Modern fertility, maternity and gynecology care with experienced doctors and patient-first support.",
+    "button": {
+      "label": "Discover Our Services",
+      "href": "/services"
+    }
+  },
+  {
+    "variant": "split",
+    "image": "/images/home/02.webp",
+    "alt": "Women specialist care at Pahal Hospital",
+    "title": "Women Specialist",
+    "titleStrong": "Care in Surat",
+    "text": "A one-stop multi specialty hospital for women's health, maternity care and family care.",
+    "button": {
+      "label": "About Pahal Hospital",
+      "href": "/about"
+    }
+  },
+  {
+    "variant": "split",
+    "image": "/images/home/03.webp",
+    "alt": "Emergency services at Pahal Hospital",
+    "title": "Emergency Services",
+    "titleStrong": "24X7 Support",
+    "text": "Emergency support with experienced medical, nursing and administrative staff.",
+    "button": {
+      "label": "Contact Us",
+      "href": "/contact"
+    }
+  },
+  {
+    "variant": "split",
+    "image": "/images/home/04.webp",
+    "alt": "Surgery facilities at Pahal Hospital",
+    "title": "All Types Of",
+    "titleStrong": "Surgeries",
+    "text": "Modern facilities and patient-first clinical care in Surat.",
+    "button": {
+      "label": "View Services",
+      "href": "/services"
+    }
+  }
+]

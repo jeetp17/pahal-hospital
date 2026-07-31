@@ -1,0 +1,87 @@
+---
+type ActiveNav = "HOME" | "ABOUT" | "SERVICES" | "TESTIMONIALS" | "CONTACT";
+
+interface Props {
+  active?: ActiveNav;
+}
+
+const { active = "HOME" } = Astro.props;
+const activeClass = (item: ActiveNav) => (active === item ? " is-active" : "");
+
+const aboutLinks = [
+  { href: "/about/our-hospital", label: "Our Hospital" },
+  { href: "/about/our-team", label: "Our Team" }
+];
+
+const services = [
+  { href: "/services/infertility", label: "Infertility" },
+  { href: "/services/obstetrics", label: "Obstetrics" },
+  { href: "/services/sonography", label: "Sonography" },
+  { href: "/services/laparoscopy", label: "Laparoscopy" },
+  { href: "/services/gynecology", label: "Gynecology" },
+  { href: "/services/fetal-medicines", label: "Fetal Medicines" },
+  { href: "/services/cancer-treatment", label: "Cancer Treatment" },
+  { href: "/services/male-infertility", label: "Male Infertility" },
+  { href: "/services/surgery", label: "Surgery" },
+  { href: "/services/medical", label: "Medical" },
+  { href: "/services/pediatric", label: "Pediatric" }
+];
+---
+
+<header id="header" class="site-header" data-site-header>
+  <div class="site-header__stripe"></div>
+  <div class="container site-header__inner">
+    <a class="site-logo" href="/" aria-label="Pahal Hospital home">
+      <img src="/images/logo.webp" alt="Pahal Hospital" />
+    </a>
+
+    <button
+      class="nav-toggle"
+      type="button"
+      aria-label="Toggle navigation"
+      aria-controls="primary-nav"
+      aria-expanded="false"
+      data-nav-toggle>
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+
+    <nav id="primary-nav" class="site-nav" aria-label="Primary navigation" data-site-nav>
+      <a class={`site-nav__link${activeClass("HOME")}`} href="/">
+        <span class="nav-plus">+</span>
+        <span class="nav-label">Home</span>
+      </a>
+      <div class={`site-nav__item has-dropdown${activeClass("ABOUT")}`} data-dropdown>
+        <button class="site-nav__link site-nav__button" type="button" aria-expanded="false" data-dropdown-toggle>
+          <span class="nav-plus">+</span>
+          <span class="nav-label">About Us</span>
+        </button>
+        <ul class="site-dropdown" aria-label="About Us">
+          {aboutLinks.map((item) => (
+            <li><a href={item.href}>{item.label}</a></li>
+          ))}
+        </ul>
+      </div>
+      <div class={`site-nav__item has-dropdown${activeClass("SERVICES")}`} data-dropdown>
+        <button class="site-nav__link site-nav__button" type="button" aria-expanded="false" data-dropdown-toggle>
+          <span class="nav-plus">+</span>
+          <span class="nav-label">Services</span>
+        </button>
+        <ul class="site-dropdown" aria-label="Services">
+          {services.map((item) => (
+            <li><a href={item.href}>{item.label}</a></li>
+          ))}
+        </ul>
+      </div>
+      <a class={`site-nav__link${activeClass("TESTIMONIALS")}`} href="/testimonials">
+        <span class="nav-plus">+</span>
+        <span class="nav-label">Testimonials</span>
+      </a>
+      <a class={`site-nav__link${activeClass("CONTACT")}`} href="/contact">
+        <span class="nav-plus">+</span>
+        <span class="nav-label">Contact Us</span>
+      </a>
+    </nav>
+  </div>
+</header>

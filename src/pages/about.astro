@@ -1,0 +1,87 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import SubPageBanner from "../components/SubPageBanner.astro";
+import aboutSliderData from "../data/about-slider.json";
+
+const title = "About Pahal Hospital | Multi Speciality Care in Surat";
+const description = "Learn about Pahal Hospital, a 20 bedded multi speciality hospital in Morabhagal, Surat with modern facilities, experienced doctors and patient-first care.";
+type AboutSlide = {
+  image: string;
+  alt: string;
+};
+
+const aboutSlides = aboutSliderData as AboutSlide[];
+
+const doctors = [
+  {
+    name: "Dr.Purvi Patel",
+    role: "M.D.(DGO) F.A.M.S. (Director)",
+    image: "/images/doctor/purvi.webp"
+  }
+];
+---
+
+<BaseLayout title={title} description={description} canonicalPath="/about" active="ABOUT">
+  <SubPageBanner title="about us" />
+
+  <div id="sub-page-content">
+    <div class="container big-font">
+      <h2 class="light bordered main-title">who <span>we are</span></h2>
+      <div class="row">
+        <div class="col-md-7">
+          <p>
+            Pahal Multi Speciality Hospital is a 20 bedded Hospital located in Morabhagal, Surat with state of the art
+            Modern facilities. The Hospital facility &amp; services have been engineered around the needs of the patients
+            &amp; society. It provides an attractive and welcoming environment for patients and visitors with light, airy
+            public spaces, comfortable waiting areas and modern consulting rooms. The patients will benefit from the new
+            modern facilities &amp; the services.
+          </p>
+
+          <p>Pahal Hospital works on its values of dedication, compassion and excellence to live upto the vision of "Heal with compassion, treat with excellence"</p>
+
+          <p>
+            Medical, nursing and administrative staff work collaboratively and the culture of respect and teamwork
+            facilitates excellent patient care and improved outcomes for staff and patients.
+          </p>
+
+          <p><strong>Our mission</strong><br />Putting the patient first, we deliver clinical care, learning and research focused on progress through evidence.</p>
+        </div>
+        <div class="col-md-5">
+          <div class="media">
+            <div class="owl-carousel image-carousel">
+              {aboutSlides.map((slide) => (
+                <div class="item">
+                  <img src={slide.image} class="img-rounded" alt={slide.alt} />
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="height20"></div>
+
+    <section class="meet-the-doctors no-bg-img team-carousel">
+      <div class="container">
+        <div class="text-center">
+          <h1 class="light">meet the <span>perfect specialists</span> team</h1>
+        </div>
+        <div class="height50"></div>
+        <div id="meet-the-team" class="owl-carousel">
+          {doctors.map((doctor) => (
+            <div class="team-member">
+              <div class="team-thumb">
+                <img src={doctor.image} class="img-rounded" alt={doctor.name} />
+              </div>
+              <h5>{doctor.name}<br /><span>{doctor.role}</span></h5>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div class="height50"></div>
+    </section>
+  </div>
+</BaseLayout>
+

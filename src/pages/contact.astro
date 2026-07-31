@@ -1,0 +1,83 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import SubPageBanner from "../components/SubPageBanner.astro";
+import Icon from "../components/Icon.astro";
+
+const title = "Contact Pahal Hospital | Morabhagal, Surat";
+const description = "Contact Pahal Hospital in Morabhagal, Surat for appointments, emergency support, directions, phone numbers and email.";
+const turnstileTestSiteKey = "1x00000000000000000000AA";
+const turnstileSiteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY || (import.meta.env.DEV ? turnstileTestSiteKey : "");
+---
+
+<BaseLayout title={title} description={description} canonicalPath="/contact" active="CONTACT">
+  <SubPageBanner title="Contact Us" />
+
+  <div id="sub-page-content" class="clearfix">
+    <div class="container">
+      <h2 class="light bordered">Get<span>Directions</span></h2>
+      <div class="row">
+        <div class="col-md-12">
+          <div class="map">
+            <iframe
+              src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d14876.97425094009!2d72.7903803!3d21.2221882!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0xbf27a0548c528d06!2sPahal%20Hospital!5e0!3m2!1sen!2sin!4v1609833871242!5m2!1sen!2sin"
+              width="800"
+              height="500"
+              style="border:0;"
+              allowfullscreen
+              aria-hidden="false"
+              tabindex="0"
+              title="Pahal Hospital location map"></iframe>
+          </div>
+        </div>
+      </div>
+      <br />
+      <div class="row contact-sections">
+        <div class="col-md-8 contact-sections__form">
+          <h2 class="light bordered">Give us a <span>Message</span></h2>
+          <div class="contact-form clearfix">
+            <div id="message-contact" class="success" role="status" aria-live="polite" style="display:none;">Thank you! we'll contact you shortly.</div>
+            <form id="contact-form" method="post" action="/api/contact">
+              <input type="text" name="fname" id="fname" placeholder="First Name" maxlength="100" required />
+              <input type="email" name="email_address" id="email_address" placeholder="Email Address" maxlength="254" required />
+              <input type="text" name="subject" id="subject" placeholder="Subject" maxlength="150" required />
+              <textarea placeholder="Message" name="msg" id="msg" maxlength="2000" required></textarea>
+              {
+                turnstileSiteKey && (
+                  <div class="contact-form__captcha">
+                    <div class="cf-turnstile" data-sitekey={turnstileSiteKey}></div>
+                  </div>
+                )
+              }
+              <button id="btnSubmit" type="submit" class="btn btn-default">Submit</button>
+            </form>
+          </div>
+        </div>
+        <div class="col-md-4 contact-sections__info">
+          <h2 class="light bordered">get in <span>touch</span></h2>
+          <div class="get-in-touch-widget">
+            <ul class="list-unstyled">
+              <li>
+                <Icon name="phone" class="contact-icon" size={42} />
+                <span>(+91) 9879771477 <br /> (+91) 261 2771477</span>
+              </li>
+              <li>
+                <Icon name="mail" class="contact-icon" size={42} />
+                <span><a href="mailto:info@pahalhospital.com">info@pahalhospital.com</a></span>
+              </li>
+              <li>
+                <Icon name="clock" class="contact-icon" size={42} />
+                <span>Mon - Fri 11:00am - 2:00pm / 6:00pm - 8:00pm <br /> Sat 11:00am - 2:00pm <br /> Sunday Emergency Only</span>
+              </li>
+              <li>
+                <Icon name="map-pin" class="contact-icon" size={42} />
+                <span>Pahal Hospital<br />Morabhagal Circle, Rander Bambakhana Road,<br />Morabhagal, Surat - 395005</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {turnstileSiteKey && <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>}
+</BaseLayout>

@@ -1,0 +1,62 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import SubPageBanner from "../../components/SubPageBanner.astro";
+import aboutSliderData from "../../data/about-slider.json";
+
+const title = "Our Hospital | Pahal Hospital Surat";
+const description = "Learn about Pahal Hospital facilities, patient-first care, modern consulting rooms and multi speciality hospital services in Morabhagal, Surat.";
+type AboutSlide = {
+  image: string;
+  alt: string;
+};
+
+const aboutSlides = aboutSliderData as AboutSlide[];
+---
+
+<BaseLayout title={title} description={description} canonicalPath="/about/our-hospital" active="ABOUT">
+  <SubPageBanner title="Our Hospital" />
+
+  <div id="sub-page-content">
+    <div class="container big-font">
+      <h2 class="light bordered main-title">who <span>we are</span></h2>
+      <div class="row hospital-intro">
+        <div class="col-md-7 hospital-intro__text">
+          <p>
+            Pahal Multi Speciality Hospital is a 20 bedded hospital located in Morabhagal, Surat with state of the art
+            modern facilities. The hospital facility and services have been planned around the needs of patients and the
+            surrounding community.
+          </p>
+
+          <p>
+            The hospital provides an attractive and welcoming environment for patients and visitors with light, airy
+            public spaces, comfortable waiting areas and modern consulting rooms. Patients benefit from modern facilities
+            and services delivered with clear attention to comfort and care.
+          </p>
+
+          <p>
+            Pahal Hospital works on its values of dedication, compassion and excellence to live up to the vision of
+            "Heal with compassion, treat with excellence".
+          </p>
+
+          <p>
+            Medical, nursing and administrative staff work collaboratively, and the culture of respect and teamwork
+            supports excellent patient care and improved outcomes for staff and patients.
+          </p>
+
+          <p><strong>Our mission</strong><br />Putting the patient first, we deliver clinical care, learning and research focused on progress through evidence.</p>
+        </div>
+        <div class="col-md-5 hospital-intro__media">
+          <div class="media">
+            <div class="owl-carousel image-carousel">
+              {aboutSlides.map((slide) => (
+                <div class="item">
+                  <img src={slide.image} class="img-rounded" alt={slide.alt} />
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</BaseLayout>

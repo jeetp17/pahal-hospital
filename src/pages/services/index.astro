@@ -1,0 +1,34 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import SubPageBanner from "../../components/SubPageBanner.astro";
+
+const title = "Services | Pahal Hospital Surat";
+const description = "Explore Pahal Hospital services including infertility, obstetrics, sonography, laparoscopy, gynecology, fetal medicine, surgery, medical and pediatric care.";
+const services = [
+  { href: "/services/infertility", label: "Infertility" },
+  { href: "/services/obstetrics", label: "Obstetrics" },
+  { href: "/services/sonography", label: "Sonography" },
+  { href: "/services/laparoscopy", label: "Laparoscopy" },
+  { href: "/services/gynecology", label: "Gynecology" },
+  { href: "/services/fetal-medicines", label: "Fetal Medicines" },
+  { href: "/services/cancer-treatment", label: "Cancer Treatment" },
+  { href: "/services/male-infertility", label: "Male Infertility" },
+  { href: "/services/surgery", label: "Surgery" },
+  { href: "/services/medical", label: "Medical" },
+  { href: "/services/pediatric", label: "Pediatric" }
+];
+---
+
+<BaseLayout title={title} description={description} canonicalPath="/services" active="SERVICES">
+  <SubPageBanner title="Services" />
+  <div id="sub-page-content">
+    <div class="container big-font">
+      <h2 class="light bordered">our <span>services</span></h2>
+      <ul class="site-page-list">
+        {services.map((service) => (
+          <li><a href={service.href}>{service.label}</a></li>
+        ))}
+      </ul>
+    </div>
+  </div>
+</BaseLayout>

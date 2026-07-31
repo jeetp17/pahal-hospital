@@ -1,0 +1,19 @@
+﻿---
+interface Props {
+  title: string;
+  text?: string;
+}
+
+const {
+  title,
+  text = "A one-stop multi specialty hospital that will take care of all your health and medical needs."
+} = Astro.props;
+---
+
+<section class="sub-page-banner text-center">
+  <div class="sub-page-banner__overlay"></div>
+  <div class="container sub-page-banner__content">
+    <h1 class="entry-title">{title}</h1>
+    <p>{text}</p>
+  </div>
+</section>

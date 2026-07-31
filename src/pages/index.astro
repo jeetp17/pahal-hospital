@@ -1,0 +1,343 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Icon from "../components/Icon.astro";
+import sliderSlides from "../data/home-slider.json";
+import testimonialsData from "../data/testimonials.json";
+
+type SliderButton = {
+  label: string;
+  href: string;
+};
+
+type SliderSlide = {
+  variant?: "image" | "split";
+  image: string;
+  alt: string;
+  title?: string;
+  titleStrong?: string;
+  text?: string;
+  button?: SliderButton;
+};
+
+type Testimonial = {
+  quote: string;
+  name: string;
+  role: string;
+  image: string;
+  alt?: string;
+};
+
+type ServiceIcon =
+  | "infertility"
+  | "gynecology"
+  | "laparoscopy"
+  | "obstetrics"
+  | "fetal-medicine"
+  | "sonography";
+
+type ServiceCard = {
+  title: string;
+  href: string;
+  icon: ServiceIcon;
+  description: string;
+};
+
+const slides = sliderSlides as SliderSlide[];
+const testimonials = testimonialsData as Testimonial[];
+
+const serviceCards: ServiceCard[] = [
+  {
+    title: "Infertility Treatment (IVF)",
+    href: "/services/infertility",
+    icon: "infertility",
+    description: "Ethical fertility evaluation and treatment plans focused on the couple's complete health journey."
+  },
+  {
+    title: "Obstetrics",
+    href: "/services/obstetrics",
+    icon: "obstetrics",
+    description: "Pregnancy care from early visits through delivery with attentive monitoring at each stage."
+  },
+  {
+    title: "Gynecology",
+    href: "/services/gynecology",
+    icon: "gynecology",
+    description: "Preventive and clinical care for menstrual, hormonal and reproductive health concerns."
+  },
+  {
+    title: "Laparoscopy",
+    href: "/services/laparoscopy",
+    icon: "laparoscopy",
+    description: "Minimally invasive surgical care with faster recovery and focused post-operative support."
+  },
+  {
+    title: "Fetal Medicine",
+    href: "/services/fetal-medicines",
+    icon: "fetal-medicine",
+    description: "Specialized fetal screening and monitoring to support informed pregnancy care decisions."
+  },
+  {
+    title: "Sonography",
+    href: "/services/sonography",
+    icon: "sonography",
+    description: "Ultrasound imaging services for accurate diagnosis, pregnancy tracking and treatment planning."
+  }
+];
+
+const title = "Pahal Hospital | Multi Speciality Hospital in Surat";
+const description = "Pahal Hospital is a multi speciality hospital in Morabhagal, Surat offering maternity care, emergency support, surgery, pediatric care and general healthcare services.";
+---
+
+<BaseLayout title={title} description={description} canonicalPath="/" active="HOME">
+  <!-- slier start -->
+  <section id="slider" class="tp-banner-container index-rev-slider clearfix">
+    <div class="tp-banner">
+      <ul>
+        {
+          slides.map((slide) => (
+            <li class={`hero-slide${slide.variant === "split" ? " hero-slide--split" : ""}`}>
+              {slide.variant === "split" ? (
+                <div class="split-hero">
+                  <div class="split-hero__content">
+                    <h1 class="split-hero__title">
+                      {slide.title}
+                      {slide.titleStrong && <strong>{slide.titleStrong}</strong>}
+                    </h1>
+                    {slide.text && <p class="split-hero__text">{slide.text}</p>}
+                    {slide.button && (
+                      <a href={slide.button.href} class="split-hero__button">
+                        <span class="split-hero__button-icon" aria-hidden="true"></span>
+                        <span>{slide.button.label}</span>
+                      </a>
+                    )}
+                  </div>
+                  <div class="split-hero__media">
+                    <img src={slide.image} alt={slide.alt} />
+                  </div>
+                </div>
+              ) : (
+                <>
+                  <img src={slide.image} alt={slide.alt} />
+                  {(slide.title || slide.text || slide.button) && (
+                    <div class="hero-caption">
+                      {slide.title && (
+                        <div class="caption sft big_white">
+                          <strong>{slide.title}</strong>
+                        </div>
+                      )}
+                      {slide.text && (
+                        <div class="caption sfr medium_grey">
+                          {slide.text}
+                        </div>
+                      )}
+                      {slide.button && (
+                        <div class="caption sfb">
+                          <a href={slide.button.href} class="btn btn-rounded btn-bordered">
+                            {slide.button.label}
+                          </a>
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </>
+              )}
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+  <!-- slier end -->
+
+  <!-- services start -->
+  <section class="home-services" aria-labelledby="home-services-title">
+    <div class="home-services__band">
+      <div class="container home-services__intro">
+        <div>
+          <p class="home-services__eyebrow">Dr. Purvi Patel</p>
+          <h2 id="home-services-title">One-Stop Destination For Women's Health Care</h2>
+        </div>
+        <p>
+          Pahal Hospital brings fertility, maternity, gynecology and surgical care together with ethical guidance,
+          practical treatment plans and personal attention for every patient.
+        </p>
+      </div>
+    </div>
+
+    <div class="container home-services__cards">
+      {
+        serviceCards.map((service) => (
+          <a class="service-card" href={service.href} aria-label={`${service.title} details`}>
+            <span class="service-card__icon" aria-hidden="true">
+              <Icon name={service.icon} size={72} strokeWidth={1.6} />
+            </span>
+            <span class="service-card__ghost" aria-hidden="true">
+              <Icon name={service.icon} size={138} strokeWidth={1.1} />
+            </span>
+            <span class="service-card__title">{service.title}</span>
+            <span class="service-card__description">{service.description}</span>
+            <span class="service-card__more">More Details <span aria-hidden="true">-&gt;</span></span>
+          </a>
+        ))
+      }
+    </div>
+
+    <p class="home-services__note">
+      We strive to provide complete women's health services at reasonable costs. <a href="/services">Explore Us</a>
+    </p>
+  </section>
+  <!-- services end -->
+
+  <!-- why pahal start -->
+  <section class="creative-sec">
+    <div class="container">
+      <div class="text-center">
+        <h1 class="light">Why Pahal Hospital is so Awesome?</h1>
+        <p class="lead">
+          We are providing best in class facility in reasonable rate. Our motto is provide good health care facility
+          to our patient and they feel like they are in their own home.
+        </p>
+      </div>
+
+      <div class="creative-sec-thumb one">
+        <figure>
+          <span class="overlay"><span class="overlay-icon"><Icon name="eye" size={32} /></span></span>
+          <img src="/images/creative/creative-sec-img1.webp" class="img-circle img-thumbnail img-responsive" alt="Outpatient Surgery" />
+          <figcaption>Outpatient Surgery</figcaption>
+        </figure>
+      </div>
+
+      <div class="creative-sec-thumb two">
+        <figure>
+          <span class="overlay"><span class="overlay-icon"><Icon name="eye" size={32} /></span></span>
+          <img src="/images/creative/creative-sec-img2.webp" class="img-circle img-thumbnail img-responsive" alt="Pediatric Clinic" />
+          <figcaption>Pediatric Clinic</figcaption>
+        </figure>
+      </div>
+
+      <div class="creative-sec-thumb three">
+        <figure>
+          <span class="overlay"><span class="overlay-icon"><Icon name="eye" size={32} /></span></span>
+          <img src="/images/creative/creative-sec-img3.webp" class="img-circle img-thumbnail img-responsive" alt="Primary Health Care" />
+          <figcaption>Primery Health Care</figcaption>
+        </figure>
+      </div>
+
+      <div class="creative-sec-thumb four">
+        <figure>
+          <span class="overlay"><span class="overlay-icon"><Icon name="eye" size={32} /></span></span>
+          <img src="/images/creative/creative-sec-img4.webp" class="img-circle img-thumbnail img-responsive" alt="Obs and Gynae Clinic" />
+          <figcaption>Obs &amp; Gynae Clinic</figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+  <!-- why pahal end -->
+
+  <!-- why choose us start -->
+  <section class="why-choose-us" aria-labelledby="why-choose-us-title">
+    <div class="container why-choose-us__inner">
+      <div class="why-choose-us__copy">
+        <p class="why-choose-us__eyebrow">Why Choose Us?</p>
+        <h2 id="why-choose-us-title">Our Cost Effective Treatment Brought within the Reach of Common People.</h2>
+      </div>
+
+      <div class="why-choose-us__stats" aria-label="Pahal Hospital highlights">
+        <div class="why-choose-us__stat">
+          <strong>100 K+</strong>
+          <span>Happy Patients</span>
+        </div>
+        <div class="why-choose-us__stat">
+          <strong>17 K+</strong>
+          <span>Babies Delivered</span>
+        </div>
+        <div class="why-choose-us__stat">
+          <strong>15 +</strong>
+          <span>Years Experience</span>
+        </div>
+        <div class="why-choose-us__stat">
+          <strong>200 +</strong>
+          <span>Awards Win</span>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- why choose us end -->
+
+  <!-- testimonials start -->
+  <section class="testimonials bg-off-white text-center">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+          <h1>What Our patients Say About Us</h1>
+          <div id="carousel-testimonials" class="owl-carousel slide testimonials-carousel">
+            {
+              testimonials.map((testimonial) => (
+                <div class="item">
+                  <p>{testimonial.quote}</p>
+                  <div class="testimonials-patient-detail">
+                    <img
+                      src={testimonial.image}
+                      class="img-circle img-thumbnail"
+                      alt={testimonial.alt ?? testimonial.name}
+                    />
+                    <p>
+                      {testimonial.name}
+                      <span>{testimonial.role}</span>
+                    </p>
+                  </div>
+                </div>
+              ))
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- testimonials end -->
+
+  <!-- profile start -->
+  <section class="doctor-profile" aria-labelledby="doctor-profile-title">
+    <div class="container">
+      <article class="doctor-profile__card">
+        <div class="doctor-profile__content">
+          <p class="doctor-profile__eyebrow">Meet Our Specialist</p>
+          <h2 id="doctor-profile-title">Dr. Purvi Patel</h2>
+          <p class="doctor-profile__role">M.D. (DGO), F.A.M.S. - Director</p>
+          <p>
+            Dr. Purvi Patel provides patient-focused fertility, maternity and gynecology care with ethical guidance,
+            practical treatment plans and personal attention for every patient.
+          </p>
+          <p><strong>Experience :</strong> 15+ Years</p>
+          <p><strong>Specialty :</strong> Obstetrics, gynecology, infertility care and maternity services.</p>
+          <p><strong>Qualification :</strong> M.D. (DGO), F.A.M.S.</p>
+
+          <nav class="doctor-profile__social" aria-label="Dr. Purvi Patel social links">
+            <a target="_blank" rel="noreferrer" href="https://www.facebook.com/pahalhospital/" aria-label="Facebook">
+              <Icon name="facebook" size={22} />
+            </a>
+            <a target="_blank" rel="noreferrer" href="https://x.com/pahalhospital" aria-label="X">
+              <Icon name="x" size={20} />
+            </a>
+            <a target="_blank" rel="noreferrer" href="https://www.instagram.com/Pahalhospital/" aria-label="Instagram">
+              <Icon name="instagram" size={22} />
+            </a>
+            <a target="_blank" rel="noreferrer" href="https://www.youtube.com/@pahalhospital" aria-label="YouTube">
+              <Icon name="youtube" size={22} />
+            </a>
+          </nav>
+        </div>
+
+        <figure class="doctor-profile__photo">
+          <img src="/images/doctor/purvi.webp" alt="Dr. Purvi Patel" />
+        </figure>
+      </article>
+    </div>
+  </section>
+  <!-- profile end -->
+</BaseLayout>
+
+
+
+
+

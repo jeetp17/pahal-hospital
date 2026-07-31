@@ -1,0 +1,105 @@
+---
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import Icon from "../components/Icon.astro";
+import { absoluteUrl, siteMeta } from "../data/site";
+import "../styles/app.css";
+
+type ActiveNav = "HOME" | "ABOUT" | "SERVICES" | "TESTIMONIALS" | "CONTACT";
+
+interface Props {
+  title?: string;
+  description?: string;
+  active?: ActiveNav;
+  canonicalPath?: string;
+  image?: string;
+  noindex?: boolean;
+}
+
+const {
+  title = siteMeta.defaultTitle,
+  description = siteMeta.defaultDescription,
+  active = "HOME",
+  canonicalPath = Astro.url.pathname,
+  image = siteMeta.image,
+  noindex = false
+} = Astro.props;
+
+const year = new Date().getFullYear();
+const canonicalUrl = absoluteUrl(canonicalPath);
+const imageUrl = absoluteUrl(image);
+const robots = noindex ? "noindex, nofollow" : "index, follow";
+const structuredData = JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "Hospital",
+  name: siteMeta.name,
+  url: siteMeta.url,
+  logo: absoluteUrl(siteMeta.logo),
+  image: imageUrl,
+  telephone: [siteMeta.phone, siteMeta.landline],
+  email: siteMeta.email,
+  address: {
+    "@type": "PostalAddress",
+    ...siteMeta.address
+  },
+  medicalSpecialty: [
+    "Gynecologic",
+    "Obstetric",
+    "Surgical",
+    "Pediatric",
+    "Emergency",
+    "Dental",
+    "Otolaryngologic",
+    "Ophthalmologic"
+  ],
+  sameAs: siteMeta.sameAs
+});
+---
+
+<!DOCTYPE html>
+<html lang="en-IN">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="keywords" content={siteMeta.keywords} />
+    <meta name="author" content={siteMeta.author} />
+    <meta name="robots" content={robots} />
+    <meta name="format-detection" content="telephone=no" />
+    <link rel="canonical" href={canonicalUrl} />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={siteMeta.name} />
+    <meta property="og:locale" content={siteMeta.locale} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:image" content={imageUrl} />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={imageUrl} />
+
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700,800" rel="stylesheet" />
+    <link rel="shortcut icon" href="/favicon.ico" />
+    <script type="application/ld+json" set:html={structuredData}></script>
+  </head>
+  <body>
+    <div id="wrapper" class="site-shell">
+      <Header active={active} />
+      <main id="content-index">
+        <slot />
+      </main>
+      <Footer year={year} />
+      <button class="back-to-top" id="back-to-top" type="button" aria-label="Back to top">
+        <Icon name="chevron-up" size={30} strokeWidth={3} />
+      </button>
+    </div>
+
+    <script defer src="/scripts/app.js"></script>
+  </body>
+</html>

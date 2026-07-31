@@ -1,0 +1,47 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import SubPageBanner from "../components/SubPageBanner.astro";
+import testimonialsData from "../data/testimonials.json";
+
+type Testimonial = {
+  quote: string;
+  name: string;
+  role: string;
+  image: string;
+  alt?: string;
+};
+
+const title = "Patient Testimonials | Pahal Hospital Surat";
+const description = "Read patient testimonials and experiences with Pahal Hospital Surat, including maternity care, hospital rooms, staff support and medical services.";
+const testimonials = testimonialsData as Testimonial[];
+---
+
+<BaseLayout title={title} description={description} canonicalPath="/testimonials" active="TESTIMONIALS">
+  <SubPageBanner title="Testimonials" />
+
+  <div id="sub-page-content">
+    <section class="testimonials-page">
+      <div class="container">
+        <div class="text-center">
+          <h2 class="light bordered main-title">what our <span>patients say</span></h2>
+        </div>
+        <div class="height50"></div>
+
+        <div class="testimonials-page__grid">
+          {testimonials.map((testimonial) => (
+            <article class="testimonials-page__card">
+              <p class="testimonials-page__quote">{testimonial.quote}</p>
+              <div class="testimonials-page__patient">
+                <img src={testimonial.image} alt={testimonial.alt ?? testimonial.name} />
+                <div>
+                  <h3>{testimonial.name}</h3>
+                  <p>{testimonial.role}</p>
+                </div>
+              </div>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+  </div>
+</BaseLayout>
