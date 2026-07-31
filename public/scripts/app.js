@@ -265,7 +265,7 @@
           return {};
         }).then(function (payload) {
           if (!response.ok || payload.key === false) {
-            throw new Error(payload.value || "Request failed");
+            throw new Error(payload.value || "Request failed (HTTP " + response.status + "). Please try again or call the hospital directly.");
           }
 
           form.reset();

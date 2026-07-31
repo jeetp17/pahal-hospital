@@ -84,7 +84,7 @@ const verifyTurnstile = async ({ token, request, env }) => {
   return { ok: true };
 };
 
-export async function onRequestPost({ request, env }) {
+async function handleContactPost({ request, env }) {
   let form;
 
   try {
@@ -156,6 +156,11 @@ export async function onRequestPost({ request, env }) {
 
     const result = await response.json().catch(() => null);
     if (!response.ok || !result?.success) {
+      console.error("Cloudflare Email API failed", {
+        status: response.status,
+        errors: result?.errors,
+        messages: result?.messages
+      });
       return json({ key: false, value: "Problem while sending email, please call the hospital directly." }, 502);
     }
   } catch {
@@ -165,6 +170,19 @@ export async function onRequestPost({ request, env }) {
   return json({ key: true, value: "Thank you! we'll contact you shortly." });
 }
 
-export function onRequestGet() {
-  return json({ key: false, value: "Method not allowed." }, 405);
+export async function onRequest({ request, env }) {
+  if (request.method === "GET") {
+    return json({ key: false, value: "Method not allowed." }, 405);
+  }
+
+  if (request.method !== "POST") {
+    return json({ key: false, value: "Method not allowed." }, 405);
+  }
+
+  try {
+    return await handleContactPost({ request, env });
+  } catch (error) {
+    console.error("Unhandled contact form error", error);
+    return json({ key: false, value: "We could not process the message. Please call the hospital directly." }, 500);
+  }
 }
